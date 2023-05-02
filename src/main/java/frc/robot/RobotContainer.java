@@ -9,16 +9,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drivetrain;
 import frc.commands.Drive;
+import frc.commands.TurretControls;
 import frc.robot.subsystems.*;
 
 public class RobotContainer {
   private final drivetrain drivetrain = new drivetrain();
+  private final turret turret = new turret();
   private final Joystick leftJoy = new Joystick(1);
   private final Joystick rightJoy = new Joystick(2);
   public RobotContainer() {
 
     drivetrain.setDefaultCommand(new Drive(drivetrain, () -> leftJoy.getX(), () -> rightJoy.getX()));
     configureBindings();
+    turret.setDefaultCommand(new TurretControls(()-> rightJoy.getX(),  ()-> rightJoy.getY(), ()-> rightJoy.getRawButton(1), turret));
   }
 
   private void configureBindings() {}

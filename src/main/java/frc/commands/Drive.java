@@ -25,6 +25,7 @@ public class Drive extends CommandBase {
     }
 
     public void end(boolean interrupted) {
+        jeffery.tankDrive(0,0);
     }
 
     @Override
