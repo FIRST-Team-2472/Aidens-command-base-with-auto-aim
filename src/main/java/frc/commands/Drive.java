@@ -21,11 +21,11 @@ public class Drive extends CommandBase {
     }
 
     public void execute() {
-        jeffery.tankDrive(left.get(), right.get());
+        jeffery.arcadeDrive(left.get(), right.get());
     }
 
     public void end(boolean interrupted) {
-        jeffery.tankDrive(0,0);
+        jeffery.arcadeDrive(0,0);
     }
 
     @Override

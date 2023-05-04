@@ -15,6 +15,7 @@ public class TurretControls extends CommandBase {
         this.pitch = pitch;
         this.shooter = shooter;
         this.turret = turret;
+        addRequirements(turret);
     }
 
     public void initialize() {
