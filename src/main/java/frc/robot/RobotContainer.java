@@ -21,7 +21,7 @@ public class RobotContainer {
   private final Intake intake = new Intake();
   public RobotContainer() {
 
-    drivetrain.setDefaultCommand(new Drive(drivetrain, () -> leftJoy.getY(), () -> rightJoy.getY()));
+    drivetrain.setDefaultCommand(new Drive(drivetrain, () -> leftJoy.getX(), () -> leftJoy.getY()));
     configureBindings();
     turret.setDefaultCommand(new TurretControls(()-> rightJoy.getX(),  ()-> rightJoy.getY(), ()-> rightJoy.getRawButton(1),turret));
     intake.setDefaultCommand(new IntakeControls(()-> rightJoy.getRawButton(2),()-> rightJoy.getRawButton(1),() -> rightJoy.getRawButton(2), intake));

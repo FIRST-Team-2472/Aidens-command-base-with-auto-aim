@@ -19,7 +19,7 @@ public class IntakeControls extends CommandBase{
 
     public void execute() {
         if(flywheelButton.get())
-            Intake.controlsFlywheel(1);
+            Intake.controlsFlywheel(-1);
         else    
             Intake.controlsFlywheel(0);
 

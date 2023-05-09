@@ -16,18 +16,30 @@ public class drivetrain extends SubsystemBase {
     private TalonSRX right = new TalonSRX(constants.rightDriveTrainID);
     private TalonSRX Bleft = new TalonSRX(constants.BleftDriveTrainID);
     private TalonSRX Bright = new TalonSRX(constants.BrightDriveTrainID);
-    MotorControllerGroup mGroupLeft = new MotorControllerGroup(left, Bleft);
-    MotorControllerGroup mGroupRight = new MotorControllerGroup((MotorController)right,(MotorController) Bright);
-    DifferentialDrive differentialMotors = new DifferentialDrive(mGroupLeft, mGroupRight);
-
-    public drivetrain(){
-      
-    }
    
-    public void arcadeDrive(double leftSpeed, double rightSpeed) {
+    public drivetrain(){
+      Bright.follow(right);
+      Bleft.follow(left);
+    }
+   public void tankDrive(double y, double x){
+    left.set(ControlMode.PercentOutput, y);
+    right.set(ControlMode.PercentOutput, x);
+   }
 
-        differentialMotors.arcadeDrive(leftSpeed, rightSpeed);
-        
+    public void arcadeDrive(double y, double x) {
+        // y is the y axis of the joystick
+        // x is the x axis of the SAME joystick
+        if (Math.abs(x) < .1)
+            x = 0;
+
+        if (Math.abs(x) + Math.abs(y) < 1) {
+            tankDrive(y - x, y + x);
+        } else {
+            // limits the motors from ever going over 75% speed
+            double betterX = (x / (Math.abs(x) + Math.abs(y)));
+            double betterY = (y / (Math.abs(x) + Math.abs(y)));
+            tankDrive(betterY - betterX, betterY + betterX);
+        }
     }
 
 }
