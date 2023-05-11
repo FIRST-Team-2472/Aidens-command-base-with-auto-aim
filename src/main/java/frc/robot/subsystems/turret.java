@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -19,9 +21,20 @@ public class turret extends SubsystemBase {
     
     public turret () {
         shooter.configFactoryDefault();
+        pitch.configFactoryDefault();
+        yaw.configFactoryDefault();
+
         ShuffleboardTab programmerBoard = Shuffleboard.getTab("Programmer Board");
         display = programmerBoard.add("Yaw angle", 0).getEntry();
         setYaw(0);
+        yaw.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0,30);
+        yaw.setSensorPhase(true);
+
+        yaw.configForwardSoftLimitEnable(true);
+        yaw.configForwardSoftLimitThreshold(150000);
+        yaw.configReverseSoftLimitEnable(true);
+        yaw.configReverseSoftLimitThreshold(-150000);
+        pitch.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
     }
     public void setYaw(double angle) {
         yaw.setSelectedSensorPosition(angle);
@@ -37,6 +50,7 @@ public class turret extends SubsystemBase {
     public void controlsYaw(double yaw) {      
         this.yaw.set(ControlMode.PercentOutput, yaw * -0.4);
     }
+
 
     public void runShooter(double shooter) {
         this.shooter.set(ControlMode.PercentOutput, shooter *-1);
