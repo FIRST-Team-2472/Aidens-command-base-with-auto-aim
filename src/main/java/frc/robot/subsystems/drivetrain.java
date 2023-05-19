@@ -22,8 +22,8 @@ public class drivetrain extends SubsystemBase {
       Bleft.follow(left);
     }
    public void tankDrive(double y, double x){
-    left.set(ControlMode.PercentOutput, y);
-    right.set(ControlMode.PercentOutput, x);
+    left.set(ControlMode.PercentOutput, y/1.5);
+    right.set(ControlMode.PercentOutput, x/1.5);
    }
 
     public void arcadeDrive(double y, double x) {

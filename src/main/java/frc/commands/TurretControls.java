@@ -5,16 +5,19 @@ import frc.robot.subsystems.turret;
 
 import java.util.function.Supplier;
 
+import javax.lang.model.util.ElementScanner14;
+
 import edu.wpi.first.util.sendable.Sendable;
 public class TurretControls extends CommandBase {
     private Supplier<Double> yaw, pitch;
-    private Supplier<Boolean> shooter;
+    private Supplier<Boolean> shooter, eject;
     private turret turret;
-    public TurretControls(Supplier<Double> yaw, Supplier<Double> pitch, Supplier<Boolean> shooter, turret turret){
+    public TurretControls(Supplier<Double> yaw, Supplier<Double> pitch, Supplier<Boolean> shooter, Supplier<Boolean> eject, turret turret){
         this.yaw = yaw;
         this.pitch = pitch;
         this.shooter = shooter;
         this.turret = turret;
+        this.eject = eject;
         addRequirements(turret);
     }
 
@@ -26,8 +29,10 @@ public class TurretControls extends CommandBase {
         turret.controlsPitch(pitch.get());
         if(shooter.get())
             turret.runShooter(1);
-        else    
-            turret.runShooter(0);
+        else if(eject.get())   
+            turret.runShooter(-1);
+        else 
+        turret.runShooter(0);
     }
 
     public void end(boolean interrupted) {

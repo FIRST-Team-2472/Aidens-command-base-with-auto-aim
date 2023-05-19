@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drivetrain;
@@ -18,13 +19,14 @@ public class RobotContainer {
   private final turret turret = new turret();
   private final Joystick leftJoy = new Joystick(1);
   private final Joystick rightJoy = new Joystick(2);
+  public static XboxController Xboxcontroller = new XboxController(0);
   private final Intake intake = new Intake();
   public RobotContainer() {
 
     drivetrain.setDefaultCommand(new Drive(drivetrain, () -> leftJoy.getX(), () -> leftJoy.getY()));
     configureBindings();
-    turret.setDefaultCommand(new TurretControls(()-> rightJoy.getX(),  ()-> rightJoy.getY(), ()-> rightJoy.getRawButton(1),turret));
-    intake.setDefaultCommand(new IntakeControls(()-> rightJoy.getRawButton(2),()-> rightJoy.getRawButton(1),() -> rightJoy.getRawButton(2), intake));
+    turret.setDefaultCommand(new TurretControls(()-> rightJoy.getX(),  ()-> rightJoy.getY(), ()-> Xboxcontroller.getRightBumper(),()-> leftJoy.getRawButton(2), turret));
+    intake.setDefaultCommand(new IntakeControls(()-> rightJoy.getRawButton(2),()-> Xboxcontroller.getRightBumper(),() -> rightJoy.getRawButton(2), intake));
   }
 
   private void configureBindings() {}
