@@ -26,7 +26,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new Drive(drivetrain, () -> leftJoy.getX(), () -> leftJoy.getY()));
     configureBindings();
     turret.setDefaultCommand(new TurretControls(()-> rightJoy.getX(),  ()-> rightJoy.getY(), ()-> Xboxcontroller.getRightBumper(),()-> leftJoy.getRawButton(2), turret));
-    intake.setDefaultCommand(new IntakeControls(()-> rightJoy.getRawButton(2),()-> Xboxcontroller.getRightBumper(),() -> rightJoy.getRawButton(2),()-> Xboxcontroller.getRightBumper(), intake));
+    intake.setDefaultCommand(new IntakeControls(()-> rightJoy.getRawButton(2),()-> Xboxcontroller.getRightBumper(),() -> rightJoy.getRawButton(2),()-> Xboxcontroller.getRightBumper(), ()-> Xboxcontroller.getRightBumper(), intake));
   }
 
   private void configureBindings() {}
