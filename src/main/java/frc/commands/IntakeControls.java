@@ -12,8 +12,7 @@ public class IntakeControls extends CommandBase{
         this.elevatorButton = elevatorButton;
         this.flywheelButton = flywheelButton;
         this.Intake = Intake;
-        this.shooter = shooter;
-        addRequirements(Intake);
+        addRequirements(Intake);    
     }
     public void initialize() {
     }
