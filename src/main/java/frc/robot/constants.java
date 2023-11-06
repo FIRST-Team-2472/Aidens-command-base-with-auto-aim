@@ -8,8 +8,8 @@ public final class constants {
     public static final int intakeMotorID = 15;
     public static final int intakeCoveyorID = 12;
     public static final int intakeElevatorID = 7;
-    public static final int pitchMotorID = 10;
+    public static final int pitchMotorID = 11;
     public static final int yawMotorID = 13;
-    public static final int shooterMotorID = 11;
+    public static final int shooterMotorID = 10;
      
 }

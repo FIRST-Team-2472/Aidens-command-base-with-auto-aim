@@ -14,6 +14,7 @@ public class IntakeControls extends CommandBase{
         this.elevatorButton = elevatorButton;
         this.flywheelButton = flywheelButton;
         this.Intake = Intake;
+        boolean eject = false;
         addRequirements(Intake);
     }
     public void initialize() {
@@ -30,12 +31,12 @@ public class IntakeControls extends CommandBase{
         else    
             Intake.controlsConveyor(0);
 
-        if(elevatorButton.get())
-            Intake.controlsElevator(1);
-        else if(eject.get()) 
-        Intake.controlsElevator(-1);
-        else
+        if(elevatorButton.get()){
+            Intake.controlsElevator(-1);
+            Intake.controlsConveyor(1);
+         }else{
             Intake.controlsElevator(0);
+         }
     }
 
     public void end(boolean interrupted) {

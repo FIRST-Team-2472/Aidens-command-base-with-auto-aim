@@ -21,7 +21,7 @@ public class Drive extends CommandBase {
     }
 
     public void execute() {
-        jeffery.arcadeDrive(left.get(), right.get());
+        jeffery.arcadeDrive(left.get()/2, right.get()/2);
     }
 
     public void end(boolean interrupted) {
