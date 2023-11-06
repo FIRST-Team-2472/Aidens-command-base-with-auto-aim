@@ -32,8 +32,8 @@ public class IntakeControls extends CommandBase{
 
         if(elevatorButton.get())
             Intake.controlsElevator(1);
-        //else if(eject.get()) 
-        //Intake.controlsElevator(-1);
+        else if(eject.get()) 
+        Intake.controlsElevator(-1);
         else
             Intake.controlsElevator(0);
     }
