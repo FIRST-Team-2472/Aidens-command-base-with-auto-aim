@@ -34,6 +34,7 @@ public class RobotContainer {
   private void configureBindings() {}
   
   public Command getAutonomousCommand() {
-    return new Aim();
+    //return new Aim();
+    return Commands.print("No autonomous command configured");
   }
 }
