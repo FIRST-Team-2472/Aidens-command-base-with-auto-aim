@@ -2,10 +2,8 @@ package frc.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.turret;
-
+import frc.robot.subsystems.Intake;
 import java.util.function.Supplier;
-
-import javax.lang.model.util.ElementScanner14;
 
 import edu.wpi.first.util.sendable.Sendable;
 public class TurretControls extends CommandBase {
@@ -29,9 +27,9 @@ public class TurretControls extends CommandBase {
         turret.controlsPitch(pitch.get());
         if(shooter.get())
             turret.runShooter(1);
-        else if(eject.get())   
+        else if(eject.get()){   
             turret.runShooter(-1);
-        else 
+        }else 
         turret.runShooter(0);
     }
 
