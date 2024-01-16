@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.turret;
 
 public class Aim extends CommandBase {
     DigitalInput LimitSwitch = new DigitalInput(0);
+    turret turret;
     // Supplier<Double> yaw = () -> 0.0;
     // Supplier<Double> pitch = () -> 0.0;
     private GenericEntry tx;
@@ -50,6 +52,7 @@ public class Aim extends CommandBase {
         y.setDouble(tagPos.getY());
         z.setDouble(tagPos.getZ());
 
+        System.out.println("Turret Yaw: " + turret.getYawPosition());
     }
 
     void initLimeLightShuffleBoard() {
