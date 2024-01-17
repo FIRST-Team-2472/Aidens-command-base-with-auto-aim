@@ -13,7 +13,7 @@ import frc.robot.subsystems.turret;
 
 public class Aim extends CommandBase {
     DigitalInput LimitSwitch = new DigitalInput(0);
-    turret turret;
+    //turret turret;
     // Supplier<Double> yaw = () -> 0.0;
     // Supplier<Double> pitch = () -> 0.0;
     private GenericEntry tx;
@@ -40,19 +40,19 @@ public class Aim extends CommandBase {
     @Override
     public void execute() {
         // System.out.println("Yaw: " + yaw.get() + ", Pitch: " + pitch.get());
-        llresults = LimelightHelpers.getLatestResults(null);
+        llresults = LimelightHelpers.getLatestResults("limelight-shooter");
         if (llresults.targetingResults.targets_Fiducials.length > 0) {
             tagPos = llresults.targetingResults.targets_Fiducials[0].getTargetPose_CameraSpace();
         }
 
-        tx.setDouble(LimelightHelpers.getTX(null));
-        ty.setDouble(LimelightHelpers.getTY(null));
+        tx.setDouble(LimelightHelpers.getTX("limelight-shooter"));
+        ty.setDouble(LimelightHelpers.getTY("limelight-shooter"));
 
         x.setDouble(tagPos.getX());
         y.setDouble(tagPos.getY());
         z.setDouble(tagPos.getZ());
 
-        System.out.println("Turret Yaw: " + turret.getYawPosition());
+        //System.out.println("Turret Yaw: " + turret.getYawPosition());
     }
 
     void initLimeLightShuffleBoard() {
@@ -63,7 +63,7 @@ public class Aim extends CommandBase {
         x = limelightBoard.add("x", 0).getEntry();
         y = limelightBoard.add("y", 0).getEntry();
         z = limelightBoard.add("z", 0).getEntry();
-        limelightBoard.addCamera("LimeLight Stream", "limelight0", "mjpg:http://10.24.72.23:5800").withSize(3, 3);
+        limelightBoard.addCamera("LimeLightShooter Stream", "limelight_shooter", "mjpg:http://limelight-shooter.local:5800").withSize(3, 3);
         Shuffleboard.update();
     }
 
