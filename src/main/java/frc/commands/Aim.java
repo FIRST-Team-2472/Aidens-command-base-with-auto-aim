@@ -1,7 +1,6 @@
 package frc.commands;
 
 import java.util.function.Supplier;
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -10,12 +9,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.turret;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Aim extends CommandBase {
-    DigitalInput LimitSwitch = new DigitalInput(0);
-    //turret turret;
-    // Supplier<Double> yaw = () -> 0.0;
-    // Supplier<Double> pitch = () -> 0.0;
+    DigitalInput limitswitch = new DigitalInput(0);
+    private turret turret;
+    Supplier<Double> yaw;
+    Supplier<Double> pitch;
     private GenericEntry tx;
     private GenericEntry ty;
     private GenericEntry ta;
@@ -25,7 +25,9 @@ public class Aim extends CommandBase {
     private Pose3d tagPos = new Pose3d();
     LimelightHelpers.LimelightResults llresults;
 
-    public Aim() {
+    public Aim(turret turret) {
+        this.turret = turret;
+        addRequirements(turret);
 
         // public void ();
         initLimeLightShuffleBoard();
@@ -34,7 +36,12 @@ public class Aim extends CommandBase {
 
     @Override
     public void initialize() {
+      turret.controlsPitch(0.2);
 
+        if(limitswitch.get()) {
+            turret.controlsPitch(0);
+            Supplier<Double> pitch = ()-> 0.0;
+        }
     }
 
     @Override
