@@ -12,6 +12,7 @@ import frc.robot.subsystems.drivetrain;
 import frc.commands.Aim;
 import frc.commands.Drive;
 import frc.commands.IntakeControls;
+import frc.commands.Stream;
 import frc.commands.TurretControls;
 import frc.robot.subsystems.*;
 
@@ -26,15 +27,13 @@ public class RobotContainer {
 
     drivetrain.setDefaultCommand(new Drive(drivetrain, () -> leftJoy.getX(), () -> leftJoy.getY()));
     configureBindings();
-    turret.setDefaultCommand(new TurretControls(()-> Xboxcontroller.getRightX
-    (),  ()-> Xboxcontroller.getRightY(), ()-> Xboxcontroller.getRightBumper(),()-> leftJoy.getRawButton(2), turret));
-    intake.setDefaultCommand(new IntakeControls(()-> rightJoy.getRawButton(1),()-> Xboxcontroller.getRightBumper(),() -> rightJoy.getRawButton(1), intake));
+    turret.setDefaultCommand(new TurretControls(()-> Xboxcontroller.getRightX(),  ()-> Xboxcontroller.getLeftY(), ()-> Xboxcontroller.getRightBumper(),()-> leftJoy.getRawButton(2), turret));
+    intake.setDefaultCommand(new IntakeControls(()-> rightJoy.getRawButton(1),()-> Xboxcontroller.getRightBumper(),() -> rightJoy.getRawButton(1),()-> leftJoy.getRawButton(2), intake));
   }
 
   private void configureBindings() {}
   
   public Command getAutonomousCommand() {
-    //return new Aim();
-    return Commands.print("No autonomous command configured");
+    return new Stream(); // hi
   }
 }
