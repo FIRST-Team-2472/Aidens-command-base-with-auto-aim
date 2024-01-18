@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.turret;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Aim extends CommandBase {
     DigitalInput limitswitch = new DigitalInput(0);
