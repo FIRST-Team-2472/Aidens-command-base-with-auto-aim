@@ -12,6 +12,7 @@ import frc.robot.subsystems.turret;
 
 public class Aim extends CommandBase {
     DigitalInput limitswitch = new DigitalInput(0);
+    boolean calibrating;
     private turret turret;
     Supplier<Double> yaw;
     Supplier<Double> pitch;
@@ -35,17 +36,17 @@ public class Aim extends CommandBase {
 
     @Override
     public void initialize() {
-      turret.controlsPitch(0.2);
-
-        if(limitswitch.get()) {
-            turret.controlsPitch(0);
-            Supplier<Double> pitch = ()-> 0.0;
-        }
+      calibrating = true;
     }
 
     @Override
     public void execute() {
         // System.out.println("Yaw: " + yaw.get() + ", Pitch: " + pitch.get());
+        if (calibrating) {
+            turret.controlsPitch(-0.3);
+            calibrate();
+        }
+
         llresults = LimelightHelpers.getLatestResults("limelight-shooter");
         if (llresults.targetingResults.targets_Fiducials.length > 0) {
             tagPos = llresults.targetingResults.targets_Fiducials[0].getTargetPose_CameraSpace();
@@ -58,7 +59,7 @@ public class Aim extends CommandBase {
         y.setDouble(tagPos.getY());
         z.setDouble(tagPos.getZ());
 
-        //System.out.println("Turret Yaw: " + turret.getYawPosition());
+        System.out.println("Turret Yaw: " + turret.getPitchPosition());
     }
 
     void initLimeLightShuffleBoard() {
@@ -76,5 +77,14 @@ public class Aim extends CommandBase {
     public float[] convertToFloatArray(Pose3d pos) {
         float[] array = { (float) pos.getX(), (float) pos.getY(), (float) pos.getZ() };
         return array;
+    }
+
+    private void calibrate() {
+        if(!limitswitch.get()) {
+            turret.controlsPitch(0);
+            Supplier<Double> pitch = ()-> 0.0;
+            calibrating = false;
+            turret.setPitch(0.0);
+        }
     }
 }

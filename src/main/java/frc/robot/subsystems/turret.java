@@ -27,8 +27,11 @@ public class turret extends SubsystemBase {
         ShuffleboardTab programmerBoard = Shuffleboard.getTab("Programmer Board");
         display = programmerBoard.add("Yaw angle", 0).getEntry();
         setYaw(0);
+        setPitch(0);
         yaw.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0,30);
+        pitch.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 30);
         yaw.setSensorPhase(true);
+        pitch.setSensorPhase(true);
 
         yaw.configForwardSoftLimitEnable(true);
         yaw.configForwardSoftLimitThreshold(150000);
@@ -39,8 +42,17 @@ public class turret extends SubsystemBase {
     public void setYaw(double angle) {
         yaw.setSelectedSensorPosition(angle);
     }
+
+    public void setPitch(double angle) {
+        pitch.setSelectedSensorPosition(angle);
+    }
+
     public double getYawPosition(){
-        return yaw.getSelectedSensorPosition();
+        return yaw.getSelectedSensorPosition(1);
+    }
+
+    public double getPitchPosition(){
+        return pitch.getSelectedSensorPosition(1);
     }
 
     public void controlsPitch(double pitch) {
@@ -49,6 +61,10 @@ public class turret extends SubsystemBase {
 
     public void controlsYaw(double yaw) {      
         this.yaw.set(ControlMode.PercentOutput, yaw * -0.4);
+    }
+
+    public void setPitchDegrees(double degrees) {
+        this.yaw.set(ControlMode.MotionMagic, (-26402.5 * degrees + 528050));
     }
 
 
