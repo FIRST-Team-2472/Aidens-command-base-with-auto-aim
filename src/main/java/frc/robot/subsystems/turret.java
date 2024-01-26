@@ -63,10 +63,6 @@ public class turret extends SubsystemBase {
         this.yaw.set(ControlMode.PercentOutput, yaw * -0.4);
     }
 
-    public void setPitchDegrees(double degrees) {
-        this.yaw.set(ControlMode.MotionMagic, (-26402.5 * degrees + 528050));
-    }
-
 
     public void runShooter(double shooter) {
         this.shooter.set(ControlMode.PercentOutput, shooter *-1);
