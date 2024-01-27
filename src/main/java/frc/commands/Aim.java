@@ -87,10 +87,12 @@ public class Aim extends CommandBase {
         if (!calibrating) {
             // Enforce Max and Min rotation
             if (goal < -500000) {
-                turret.controlsPitch(-500000);
+                goal = -500000;
             } else if (goal > 0) {
-                turret.controlsPitch(1000);
-            } else if (Math.abs(turret.getPitchPosition() - goal) < 5000) {
+                goal = 0;
+            }
+            
+            if (Math.abs(turret.getPitchPosition() - goal) < 5000) {
                 turret.controlsPitch(0.0);
             } else if (turret.getPitchPosition() < goal) {
                 turret.controlsPitch(-0.3);
