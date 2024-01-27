@@ -12,6 +12,7 @@ import frc.robot.subsystems.turret;
 
 public class Aim extends CommandBase {
     DigitalInput limitswitch = new DigitalInput(0);
+    boolean calibrating;
     private turret turret;
     Supplier<Double> yaw;
     Supplier<Double> pitch;
@@ -21,6 +22,8 @@ public class Aim extends CommandBase {
     private GenericEntry x;
     private GenericEntry y;
     private GenericEntry z;
+    private GenericEntry limitSwitchPressed;
+    private GenericEntry encoderPos;
     private Pose3d tagPos = new Pose3d();
     LimelightHelpers.LimelightResults llresults;
 
@@ -35,17 +38,16 @@ public class Aim extends CommandBase {
 
     @Override
     public void initialize() {
-      turret.controlsPitch(0.2);
-
-        if(limitswitch.get()) {
-            turret.controlsPitch(0);
-            Supplier<Double> pitch = ()-> 0.0;
-        }
+        calibrating = true;
     }
 
     @Override
     public void execute() {
-        // System.out.println("Yaw: " + yaw.get() + ", Pitch: " + pitch.get());
+        if (calibrating) {
+            turret.controlsPitch(-0.3);
+            calibrate();
+        }
+
         llresults = LimelightHelpers.getLatestResults("limelight-shooter");
         if (llresults.targetingResults.targets_Fiducials.length > 0) {
             tagPos = llresults.targetingResults.targets_Fiducials[0].getTargetPose_CameraSpace();
@@ -53,12 +55,16 @@ public class Aim extends CommandBase {
 
         tx.setDouble(LimelightHelpers.getTX("limelight-shooter"));
         ty.setDouble(LimelightHelpers.getTY("limelight-shooter"));
-
         x.setDouble(tagPos.getX());
         y.setDouble(tagPos.getY());
         z.setDouble(tagPos.getZ());
+        limitSwitchPressed.setBoolean(!limitswitch.get());
+        encoderPos.setDouble(turret.getPitchPosition());
 
-        //System.out.println("Turret Yaw: " + turret.getYawPosition());
+        //System.out.println("Z: " + z.get().getDouble() + ", Y: " + y.get().getDouble() + ", Theta: " + Math.atan(y.get().getDouble() / z.get().getDouble()) + ", TY: " + ty.get().getDouble());
+
+        System.out.println(degrees2InternalUnits(80 - ty.get().getDouble()));
+        moveToGoal(degrees2InternalUnits(80 - ty.get().getDouble()));
     }
 
     void initLimeLightShuffleBoard() {
@@ -69,12 +75,44 @@ public class Aim extends CommandBase {
         x = limelightBoard.add("x", 0).getEntry();
         y = limelightBoard.add("y", 0).getEntry();
         z = limelightBoard.add("z", 0).getEntry();
-        limelightBoard.addCamera("LimeLightShooter Stream", "limelight_shooter", "mjpg:http://limelight-shooter.local:5800").withSize(3, 3);
+        limitSwitchPressed = limelightBoard.add("Limit Switch Pressed", false).getEntry();
+        encoderPos = limelightBoard.add("Encoder Position", 0).getEntry();
+        limelightBoard
+                .addCamera("LimeLightShooter Stream", "limelight_shooter", "mjpg:http://limelight-shooter.local:5800")
+                .withSize(3, 3);
         Shuffleboard.update();
     }
 
-    public float[] convertToFloatArray(Pose3d pos) {
-        float[] array = { (float) pos.getX(), (float) pos.getY(), (float) pos.getZ() };
-        return array;
+    public void moveToGoal(double goal) {
+        if (!calibrating) {
+            // Enforce Max and Min rotation
+            if (goal < -500000) {
+                goal = -500000;
+            } else if (goal > 0) {
+                goal = 0;
+            }
+            
+            if (Math.abs(turret.getPitchPosition() - goal) < 5000) {
+                turret.controlsPitch(0.0);
+            } else if (turret.getPitchPosition() < goal) {
+                turret.controlsPitch(-0.3);
+            } else if (turret.getPitchPosition() > goal) {
+                turret.controlsPitch(0.3);
+            }
+        }
+    }
+
+    public double degrees2InternalUnits(double degrees) {
+        return (-26048.62 * degrees) + 1401556;
+    }
+
+    private void calibrate() {
+        if (!limitswitch.get()) {
+            System.out.println("Hit Switch! ----------------- !");
+            turret.controlsPitch(0);
+            Supplier<Double> pitch = () -> 0.0;
+            calibrating = false;
+            turret.setPitch(0.0);
+        }
     }
 }
