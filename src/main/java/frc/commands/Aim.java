@@ -43,7 +43,6 @@ public class Aim extends CommandBase {
 
     @Override
     public void execute() {
-        // System.out.println("Yaw: " + yaw.get() + ", Pitch: " + pitch.get());
         if (calibrating) {
             turret.controlsPitch(-0.3);
             calibrate();
@@ -61,8 +60,6 @@ public class Aim extends CommandBase {
         z.setDouble(tagPos.getZ());
         limitSwitchPressed.setBoolean(!limitswitch.get());
         encoderPos.setDouble(turret.getPitchPosition());
-
-        //System.out.println("Turret Yaw: " + turret.getPitchPosition());
 
         //System.out.println("Z: " + z.get().getDouble() + ", Y: " + y.get().getDouble() + ", Theta: " + Math.atan(y.get().getDouble() / z.get().getDouble()) + ", TY: " + ty.get().getDouble());
 
