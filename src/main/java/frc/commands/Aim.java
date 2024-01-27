@@ -25,6 +25,7 @@ public class Aim extends CommandBase {
     private GenericEntry limitSwitchPressed;
     private GenericEntry encoderPos;
     private Pose3d tagPos = new Pose3d();
+    private final double speed = 0.3;
     LimelightHelpers.LimelightResults llresults;
 
     public Aim(turret turret) {
@@ -61,7 +62,9 @@ public class Aim extends CommandBase {
         limitSwitchPressed.setBoolean(!limitswitch.get());
         encoderPos.setDouble(turret.getPitchPosition());
 
-        //System.out.println("Z: " + z.get().getDouble() + ", Y: " + y.get().getDouble() + ", Theta: " + Math.atan(y.get().getDouble() / z.get().getDouble()) + ", TY: " + ty.get().getDouble());
+        // System.out.println("Z: " + z.get().getDouble() + ", Y: " +
+        // y.get().getDouble() + ", Theta: " + Math.atan(y.get().getDouble() /
+        // z.get().getDouble()) + ", TY: " + ty.get().getDouble());
 
         System.out.println(degrees2InternalUnits(80 - ty.get().getDouble()));
         moveToGoal(degrees2InternalUnits(80 - ty.get().getDouble()));
@@ -85,20 +88,32 @@ public class Aim extends CommandBase {
 
     public void moveToGoal(double goal) {
         if (!calibrating) {
+
+            if (Math.abs(tx.get().getDouble()) < 2) {
+                turret.controlsYaw(0.0);
+            } else if (tx.get().getDouble() < 0) {
+                turret.controlsYaw(-.45);
+            } else if (tx.get().getDouble() > 0) {
+                turret.controlsYaw(.45);
+            }
+
             // Enforce Max and Min rotation
             if (goal < -500000) {
                 goal = -500000;
             } else if (goal > 0) {
                 goal = 0;
             }
-            
+
+            System.out.println("Goal: " + goal);
+
             if (Math.abs(turret.getPitchPosition() - goal) < 5000) {
                 turret.controlsPitch(0.0);
             } else if (turret.getPitchPosition() < goal) {
-                turret.controlsPitch(-0.3);
+                turret.controlsPitch(-speed);
             } else if (turret.getPitchPosition() > goal) {
-                turret.controlsPitch(0.3);
+                turret.controlsPitch(speed);
             }
+
         }
     }
 
